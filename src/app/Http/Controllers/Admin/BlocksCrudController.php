@@ -22,6 +22,7 @@ class BlocksCrudController extends CrudController
         $this->crud->setModel($modelClass);
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks');
         $this->crud->setEntityNameStrings('block', 'blocks');
+        $this->crud->addClause('where', 'page_id', '=', $_GET['page_id']);
 
         /*
         |--------------------------------------------------------------------------
@@ -66,6 +67,40 @@ class BlocksCrudController extends CrudController
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
+    }
+
+    // Overwrites the CrudController add() method to add template usage.
+    public function create()
+    {
+        // if the template in the GET parameter is missing, figure it out from the db
+        if ($_GET['page_id'] == false) {
+            $model = $this->crud->model;
+            $this->data['page_id'] = $_GET['page_id'];
+            //$template = $this->data['entry']->template;
+        }
+
+        //$this->addDefaultPageFields($template);
+        //$this->useTemplate($template);
+
+        return parent::create();
+    }
+
+    // Overwrites the CrudController edit() method to add template usage.
+    public function edit($id, $template = false)
+    {
+        $template = request('template');
+
+        // if the template in the GET parameter is missing, figure it out from the db
+        if ($template == false) {
+            $model = $this->crud->model;
+            $this->data['entry'] = $model::findOrFail($id);
+            $template = $this->data['entry']->template;
+        }
+
+        //$this->addDefaultPageFields($template);
+        //$this->useTemplate($template);
+
+        return parent::edit($id);
     }
 
 }
