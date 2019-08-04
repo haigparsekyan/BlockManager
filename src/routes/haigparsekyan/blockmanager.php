@@ -15,7 +15,6 @@ Route::group([
     ], function () {
         $controller = config('backpack.pagemanager.admin_controller_blocks_class', 'Backpack\BlockManager\app\Http\Controllers\Admin\BlocksCrudController');
 
-        //Blocks
         Route::get('blocks/create', $controller.'@create');
         Route::get('blocks/{id}/edit', $controller.'@edit');
 
