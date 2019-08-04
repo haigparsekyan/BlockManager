@@ -1,11 +1,11 @@
 <?php
 
-namespace Backpack\PageManager\app\Http\Controllers\Admin;
+namespace Backpack\BlockManager\app\Http\Controllers\Admin;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\PageManager\app\Http\Requests\PageRequest as StoreRequest;
-use Backpack\PageManager\app\Http\Requests\PageRequest as UpdateRequest;
+use Backpack\BlockManager\app\Http\Requests\BlockRequest as StoreRequest;
+use Backpack\BlockManager\app\Http\Requests\BlockRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
 
 class BlocksCrudController extends CrudController
@@ -13,7 +13,7 @@ class BlocksCrudController extends CrudController
 
     public function setup()
     {
-        $modelClass = config('backpack.pagemanager.page_model_block_class', 'Backpack\PageManager\app\Models\Block');
+        $modelClass = config('backpack.blockmanager.block_model_class', 'Backpack\BlockManager\app\Models\Block');
         /*
         |--------------------------------------------------------------------------
         | BASIC CRUD INFORMATION
