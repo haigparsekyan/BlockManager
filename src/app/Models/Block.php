@@ -30,6 +30,18 @@ class Block extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getBlocksLink()
+    {
+        return url(config('backpack.base.route_prefix') . '/blocks/create?page_id=' . $_GET['page_id']);
+    }
+
+    public function addCreateButton()
+    {
+        return '<a class="btn btn-primary ladda-button" href="' . $this->getBlocksLink() . '">' .
+            '<i class="fa fa-plus"></i> ' . trans('haigparsekyan::blockmanager.add') . '</a>';
+    }
+
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

@@ -22,8 +22,7 @@ class BlocksCrudController extends CrudController
         $this->crud->setModel($modelClass);
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks');
         $this->crud->setEntityNameStrings('block', 'blocks');
-        $this->crud->addClause('where', 'page_id', '=', $_GET['page_id']);
-
+        $this->crud->addClause('where', 'page_id', '=', $this->crud->request->page_id);
         /*
         |--------------------------------------------------------------------------
         | COLUMNS
@@ -45,6 +44,10 @@ class BlocksCrudController extends CrudController
         | BUTTONS
         |--------------------------------------------------------------------------
         */
+
+       //dd($this->crud->buttons());
+       $this->crud->removeButton('create');
+       $this->crud->addButtonFromModelFunction('top', 'create', 'addCreateButton', 'beginning');
     }
 
     // -----------------------------------------------
@@ -73,9 +76,9 @@ class BlocksCrudController extends CrudController
     public function create()
     {
         // if the template in the GET parameter is missing, figure it out from the db
-        if ($_GET['page_id'] == false) {
+        if ($this->crud->request->page_id == false) {
             $model = $this->crud->model;
-            $this->data['page_id'] = $_GET['page_id'];
+            $this->data['page_id'] = $this->crud->request->page_id;
             //$template = $this->data['entry']->template;
         }
 

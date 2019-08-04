@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'blocks' => 'Blocks'
+    'blocks' => 'Blocks',
+    'add' => 'Add block'
 ];
