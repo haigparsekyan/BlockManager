@@ -19,7 +19,7 @@ class Block extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     // protected $guarded = ['id'];
-    protected $fillable = ['title'];
+    protected $fillable = ['title', 'page_id'];
     // protected $hidden = [];
     // protected $dates = [];
     //protected $fakeColumns = [];
@@ -38,7 +38,7 @@ class Block extends Model
     public function addCreateButton()
     {
         return '<a class="btn btn-primary ladda-button" href="' . $this->getBlocksLink() . '">' .
-            '<i class="fa fa-plus"></i> ' . trans('haigparsekyan::blockmanager.add') . '</a>';
+            '<i class="fa fa-plus"></i> ' . trans('backpack::blockmanager.add') . '</a>';
     }
 
 

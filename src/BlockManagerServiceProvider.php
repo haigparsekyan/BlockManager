@@ -29,7 +29,6 @@ class BlockManagerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadTranslationsFrom(__DIR__  . '/lang/vendor/haigparsekyan', 'blockmanager');
         // publish views
         $this->publishes([__DIR__.'/resources/views' => base_path('resources/views')], 'views');
         // publish PageTemplates trait
@@ -39,7 +38,7 @@ class BlockManagerServiceProvider extends ServiceProvider
         // public config
         $this->publishes([__DIR__.'/config/blockmanager.php' => config_path('backpack/blockmanager.php')]);
         // public languages
-        $this->publishes([__DIR__.'/resources/lang' => resource_path('lang/vendor/haigparsekyan')], 'lang');
+        $this->publishes([__DIR__.'/resources/lang' => resource_path('lang/vendor/backpack')], 'lang');
 
         $this->mergeConfigFrom(__DIR__.'/config/blockmanager.php', 'backpack.blockmanager');
         $this->loadViewsFrom(realpath(__DIR__.'/resources/views/vendor/backpack/crud'), 'blockmanager');

@@ -23,6 +23,9 @@ class BlocksCrudController extends CrudController
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks');
         $this->crud->setEntityNameStrings('block', 'blocks');
         $this->crud->addClause('where', 'page_id', '=', $this->crud->request->page_id);
+        $this->crud->setHeading('Blocks of page ' . '"Test 1"', 'index');
+        //$this->crud->enableReorder('title', 1);
+
         /*
         |--------------------------------------------------------------------------
         | COLUMNS
@@ -45,7 +48,6 @@ class BlocksCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
 
-       //dd($this->crud->buttons());
        $this->crud->removeButton('create');
        $this->crud->addButtonFromModelFunction('top', 'create', 'addCreateButton', 'beginning');
     }
@@ -75,6 +77,9 @@ class BlocksCrudController extends CrudController
     // Overwrites the CrudController add() method to add template usage.
     public function create()
     {
+        $this->crud->setSubheading('Add block for page ' . '"Test 1"');
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks?page_id=' . $this->crud->request->page_id);
+        $this->crud->addField(['name' => 'page_id', 'type' => 'hidden', 'value' => $this->crud->request->page_id]);
         // if the template in the GET parameter is missing, figure it out from the db
         if ($this->crud->request->page_id == false) {
             $model = $this->crud->model;
@@ -91,14 +96,18 @@ class BlocksCrudController extends CrudController
     // Overwrites the CrudController edit() method to add template usage.
     public function edit($id, $template = false)
     {
-        $template = request('template');
+        $data = $this->crud->getUpdateFields($this->crud->request->id);
+        $this->crud->setSubheading('Edit block for page ' . 'asd');
+        $this->crud->addField(['name' => 'page_id', 'type' => 'hidden']);
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks?page_id=' . $data['page_id']['value']);
+        //$template = request('template');
 
         // if the template in the GET parameter is missing, figure it out from the db
-        if ($template == false) {
-            $model = $this->crud->model;
-            $this->data['entry'] = $model::findOrFail($id);
-            $template = $this->data['entry']->template;
-        }
+//        if ($template == false) {
+//            $model = $this->crud->model;
+//            $this->data['entry'] = $model::findOrFail($id);
+//            $template = $this->data['entry']->template;
+//        }
 
         //$this->addDefaultPageFields($template);
         //$this->useTemplate($template);
