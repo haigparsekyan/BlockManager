@@ -4,6 +4,7 @@ namespace Backpack\BlockManager\app\Models;
 
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Block extends Model
 {
@@ -38,7 +39,7 @@ class Block extends Model
     public function addCreateButton()
     {
         return '<a class="btn btn-primary ladda-button" href="' . $this->getBlocksLink() . '">' .
-            '<i class="fa fa-plus"></i> ' . trans('backpack::blockmanager.add') . '</a>';
+            '<i class="fa fa-plus"></i>&nbsp; ' . trans('backpack::blockmanager.add') . '</a>';
     }
 
     public function getReorderLink()
@@ -49,8 +50,19 @@ class Block extends Model
     public function addReorderButton()
     {
         return '<a class="btn btn-default ladda-button" href="' . $this->getReorderLink() . '">' .
-            '<i class="fa fa-arrows"></i> ' . trans('backpack::blockmanager.reorder') . '</a>';
+            '<i class="fa fa-arrows-v"></i>&nbsp; ' . trans('backpack::blockmanager.reorder') . '</a>';
     }
+
+    public function getPageTitle($id) {
+        $page = DB::table('pages')->where('id', $id)->first();
+        if($page) {
+            return $page->title;
+        }
+
+        return '';
+    }
+
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
