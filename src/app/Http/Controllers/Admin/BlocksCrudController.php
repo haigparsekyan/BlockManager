@@ -21,10 +21,12 @@ class BlocksCrudController extends CrudController
         */
         $this->crud->setModel($modelClass);
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks');
+
         $this->crud->setEntityNameStrings('block', 'blocks');
         $this->crud->addClause('where', 'page_id', '=', $this->crud->request->page_id);
         $this->crud->setHeading('Blocks of page ' . '"Test 1"', 'index');
-        //$this->crud->enableReorder('title', 1);
+        $this->crud->enableReorder('title', 1);
+        $this->crud->allowAccess('reorder');
 
         /*
         |--------------------------------------------------------------------------
@@ -49,6 +51,8 @@ class BlocksCrudController extends CrudController
         */
 
        $this->crud->removeButton('create');
+       $this->crud->removeButton('reorder');
+       $this->crud->addButtonFromModelFunction('top', 'reorder', 'addReorderButton', 'beginning');
        $this->crud->addButtonFromModelFunction('top', 'create', 'addCreateButton', 'beginning');
     }
 
@@ -115,4 +119,8 @@ class BlocksCrudController extends CrudController
         return parent::edit($id);
     }
 
+    public function reorder() {
+        $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks?page_id=' . $this->crud->request->page_id);
+        return parent::reorder();
+    }
 }

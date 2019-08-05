@@ -41,7 +41,16 @@ class Block extends Model
             '<i class="fa fa-plus"></i> ' . trans('backpack::blockmanager.add') . '</a>';
     }
 
+    public function getReorderLink()
+    {
+        return url(config('backpack.base.route_prefix') . '/blocks/reorder?page_id=' . $_GET['page_id']);
+    }
 
+    public function addReorderButton()
+    {
+        return '<a class="btn btn-default ladda-button" href="' . $this->getReorderLink() . '">' .
+            '<i class="fa fa-arrows"></i> ' . trans('backpack::blockmanager.reorder') . '</a>';
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

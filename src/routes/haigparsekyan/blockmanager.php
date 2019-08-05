@@ -18,6 +18,13 @@ Route::group([
         Route::get('blocks/create', $controller.'@create');
         Route::get('blocks/{id}/edit', $controller.'@edit');
 
+        Route::get('blocks/reorder', $controller.'@reorder');
+        Route::get('blocks/reorder/{lang}', $controller.'@reorder');
+        Route::post('blocks/reorder', $controller.'@saveReorder');
+        Route::post('blocks/reorder/{lang}', $controller.'@saveReorder');
+        Route::get('blocks/{id}/details', $controller.'@showDetailsRow');
+        Route::get('blocks/{id}/translate/{lang}', $controller.'@translateItem');
+
         Route::post('blocks/search', [
             'as' => 'crud.blocks.search',
             'uses' => $controller.'@search',
