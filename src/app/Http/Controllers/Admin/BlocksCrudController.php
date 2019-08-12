@@ -104,6 +104,7 @@ class BlocksCrudController extends CrudController
         $data = $this->crud->getUpdateFields($this->crud->request->id);
         $this->crud->setSubheading('Edit block for page ' . $this->crud->getModel()->getPageTitle($data['page_id']['value']));
         $this->crud->addField(['name' => 'page_id', 'type' => 'hidden']);
+        $this->crud->setEditView('blockmanager::edit');
         //$this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks?page_id=' . $data['page_id']['value'], 'edit');
         //$template = request('template');
 
