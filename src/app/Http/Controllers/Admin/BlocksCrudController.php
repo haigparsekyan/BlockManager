@@ -7,9 +7,11 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\BlockManager\app\Http\Requests\BlockRequest as StoreRequest;
 use Backpack\BlockManager\app\Http\Requests\BlockRequest as UpdateRequest;
 use Backpack\CRUD\CrudPanel;
+use App\BlockTemplates;
 
 class BlocksCrudController extends CrudController
 {
+    use BlockTemplates;
 
     public function setup()
     {
@@ -27,6 +29,7 @@ class BlocksCrudController extends CrudController
         $this->crud->setHeading('Blocks of page "' . $this->crud->getModel()->getPageTitle($this->crud->request->page_id) . '"', 'index');
         $this->crud->enableReorder('title', 1);
         $this->crud->allowAccess('reorder');
+        $this->crud->orderBy('lft', 'ASC');
 
         /*
         |--------------------------------------------------------------------------
@@ -85,16 +88,6 @@ class BlocksCrudController extends CrudController
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks?page_id=' . $this->crud->request->page_id);
         $this->crud->addField(['name' => 'page_id', 'type' => 'hidden', 'value' => $this->crud->request->page_id]);
 
-        // if the template in the GET parameter is missing, figure it out from the db
-//        if ($this->crud->request->page_id == false) {
-//            $model = $this->crud->model;
-//            $this->data['page_id'] = $this->crud->request->page_id;
-//            //$template = $this->data['entry']->template;
-//        }
-
-        //$this->addDefaultPageFields($template);
-        //$this->useTemplate($template);
-
         return parent::create();
     }
 
@@ -104,19 +97,9 @@ class BlocksCrudController extends CrudController
         $data = $this->crud->getUpdateFields($this->crud->request->id);
         $this->crud->setSubheading('Edit block for page ' . $this->crud->getModel()->getPageTitle($data['page_id']['value']));
         $this->crud->addField(['name' => 'page_id', 'type' => 'hidden']);
+        $this->crud->addField(['name' => 'block', 'type' => 'hidden']);
         $this->crud->setEditView('blockmanager::edit');
-        //$this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks?page_id=' . $data['page_id']['value'], 'edit');
-        //$template = request('template');
-
-        // if the template in the GET parameter is missing, figure it out from the db
-//        if ($template == false) {
-//            $model = $this->crud->model;
-//            $this->data['entry'] = $model::findOrFail($id);
-//            $template = $this->data['entry']->template;
-//        }
-
-        //$this->addDefaultPageFields($template);
-        //$this->useTemplate($template);
+        $this->getBlockFields($data['block']['value']);
 
         return parent::edit($id);
     }
@@ -124,5 +107,36 @@ class BlocksCrudController extends CrudController
     public function reorder() {
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks?page_id=' . $this->crud->request->page_id);
         return parent::reorder();
+    }
+
+    public function getBlockFields($block_name = null)
+    {
+        $blocks = $this->getBlocks();
+        $names = \Illuminate\Support\Arr::pluck($blocks, 'name');
+
+        if(!in_array($block_name, $names)) {
+            abort(503, trans('backpack::blockmanager.block_not_found'));
+        }
+
+        if ($blocks) {
+            $this->{$block_name}();
+        }
+    }
+
+    /**
+     * Get all defined blocks.
+     */
+    public function getBlocks()
+    {
+        $blocks = [];
+
+        $blocks_trait = new \ReflectionClass('App\BlockTemplates');
+        $blocks = $blocks_trait->getMethods();
+
+        if (!count($blocks)) {
+            abort(503, trans('backpack::pagemanager.template_not_found'));
+        }
+
+        return $blocks;
     }
 }

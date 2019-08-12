@@ -20,7 +20,7 @@ class Block extends Model
     protected $primaryKey = 'id';
     public $timestamps = true;
     // protected $guarded = ['id'];
-    protected $fillable = ['title', 'page_id'];
+    protected $fillable = ['title', 'page_id', 'block'];
     // protected $hidden = [];
     // protected $dates = [];
     //protected $fakeColumns = [];

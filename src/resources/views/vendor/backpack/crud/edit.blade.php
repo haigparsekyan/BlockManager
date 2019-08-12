@@ -60,7 +60,7 @@
 
             <div class="">
 
-                @include('crud::inc.form_save_buttons')
+                @include('blockmanager::inc.form_save_buttons')
 
 		    </div><!-- /.box-footer-->
 		  </div><!-- /.box -->

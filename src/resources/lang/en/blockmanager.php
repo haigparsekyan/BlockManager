@@ -2,5 +2,6 @@
 
 return [
     'blocks' => 'Blocks',
-    'add' => 'Add block'
+    'add' => 'Add block',
+    'block_not_found' => 'test'
 ];
