@@ -38,7 +38,7 @@ class BlocksCrudController extends CrudController
         */
 
         $this->crud->setFromDb();
-        $this->crud->setColumns(['title']);
+        $this->crud->setColumns(['title', 'block']);
 
         /*
         |--------------------------------------------------------------------------
@@ -75,6 +75,7 @@ class BlocksCrudController extends CrudController
     public function update(UpdateRequest $request)
     {
         // your additional operations before save here
+//dd($request);exit;
         $redirect_location = parent::updateCrud($request);
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
@@ -98,7 +99,7 @@ class BlocksCrudController extends CrudController
         $this->crud->setSubheading('Edit block for page ' . $this->crud->getModel()->getPageTitle($data['page_id']['value']));
         $this->crud->addField(['name' => 'page_id', 'type' => 'hidden']);
         $this->crud->addField(['name' => 'block', 'type' => 'hidden']);
-        $this->crud->setEditView('blockmanager::edit');
+        //$this->crud->setEditView('blockmanager::edit');
         $this->getBlockFields($data['block']['value']);
 
         return parent::edit($id);
