@@ -21,12 +21,10 @@ class Block extends Model
     public $timestamps = true;
     // protected $guarded = ['id'];
     protected $fillable = ['title', 'page_id', 'block', 'extras'];
-    //protected $hidden = ['extras'];
+    //protected $hidden = [];
     // protected $dates = [];
     protected $fakeColumns = ['extras'];
-//    protected $casts = [
-//        'extras' => 'array'
-//    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

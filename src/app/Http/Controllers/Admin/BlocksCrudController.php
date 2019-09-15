@@ -66,6 +66,8 @@ class BlocksCrudController extends CrudController
     public function store(StoreRequest $request)
     {
         // your additional operations before save here
+        $request_for_extra = $request->except('title', 'block', 'id', 'page_id', 'save_action', '_token', '_method', 'current_tab', 'http_referrer');
+        $request->request->add(['extras' => json_encode($request_for_extra)]);
         $redirect_location = parent::storeCrud($request);
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
@@ -75,7 +77,8 @@ class BlocksCrudController extends CrudController
     public function update(UpdateRequest $request)
     {
         // your additional operations before save here
-//dd($request);exit;
+        $request_for_extra = $request->except('title', 'block', 'id', 'page_id', 'save_action', '_token', '_method', 'current_tab', 'http_referrer');
+        $request->request->add(['extras' => json_encode($request_for_extra)]);
         $redirect_location = parent::updateCrud($request);
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
@@ -88,6 +91,7 @@ class BlocksCrudController extends CrudController
         $this->crud->setSubheading('Add block for page ' . $this->crud->getModel()->getPageTitle($this->crud->request->page_id));
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks?page_id=' . $this->crud->request->page_id);
         $this->crud->addField(['name' => 'page_id', 'type' => 'hidden', 'value' => $this->crud->request->page_id]);
+        $this->crud->setCreateView('blockmanager::create');
 
         return parent::create();
     }
@@ -99,7 +103,7 @@ class BlocksCrudController extends CrudController
         $this->crud->setSubheading('Edit block for page ' . $this->crud->getModel()->getPageTitle($data['page_id']['value']));
         $this->crud->addField(['name' => 'page_id', 'type' => 'hidden']);
         $this->crud->addField(['name' => 'block', 'type' => 'hidden']);
-        //$this->crud->setEditView('blockmanager::edit');
+        $this->crud->setEditView('blockmanager::edit');
         $this->getBlockFields($data['block']['value']);
 
         return parent::edit($id);
