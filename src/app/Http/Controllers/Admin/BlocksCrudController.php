@@ -71,6 +71,9 @@ class BlocksCrudController extends CrudController
         $redirect_location = parent::storeCrud($request);
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
+        $block_id = \Illuminate\Support\Facades\DB::table('blocks')->max('id');
+        $redirect_location->setTargetUrl('blocks/' . $block_id . '/edit');
+
         return $redirect_location;
     }
 
@@ -80,6 +83,7 @@ class BlocksCrudController extends CrudController
         $request_for_extra = $request->except('title', 'block', 'id', 'page_id', 'save_action', '_token', '_method', 'current_tab', 'http_referrer');
         $request->request->add(['extras' => json_encode($request_for_extra)]);
         $redirect_location = parent::updateCrud($request);
+        $redirect_location->setTargetUrl('/' . config('backpack.base.route_prefix') . '/blocks?page_id=' . $request->request->get('page_id'));
         // your additional operations after save here
         // use $this->data['entry'] or $this->crud->entry
         return $redirect_location;
@@ -89,8 +93,13 @@ class BlocksCrudController extends CrudController
     public function create()
     {
         $this->crud->setSubheading('Add block for page ' . $this->crud->getModel()->getPageTitle($this->crud->request->page_id));
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/blocks?page_id=' . $this->crud->request->page_id);
         $this->crud->addField(['name' => 'page_id', 'type' => 'hidden', 'value' => $this->crud->request->page_id]);
+        $this->crud->addField([
+            'name' => 'block',
+            'label' => trans('backpack::pagemanager.content'),
+            'type' => 'select2_from_array',
+            'options' => ['content' => 'content', 'gallery' => 'gallery'],
+        ]);
         $this->crud->setCreateView('blockmanager::create');
 
         return parent::create();
